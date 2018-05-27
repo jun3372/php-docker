@@ -8,3 +8,4 @@ Thumbs.db
 /mysql/data/*
 /nginx/logs/nginx/access.log
 /nginx/logs/nginx/error.log
+/app/*
