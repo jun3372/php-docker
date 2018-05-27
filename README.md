@@ -1,5 +1,5 @@
-# 拍簧片Docker环境镜像
-    PHP7.2.6 MySQL Nginx Redis
+# 拍簧片Docker镜像环境
+    PHP-7.2.6 MySQL-5.7 Nginx-1.13.0 Redis-latest
 ### 启动所有环境
     docker-composer.exe up -d
 ### 启动指定镜像
