@@ -3,18 +3,20 @@ version: '2'
 services:
   web:
     container_name: "Jun_Nginx"
-    image: 'nginx:1.13.0'
+    image: 'nginx:${NGINX_VERSION}'
     ports:
-      - 80:80
-      - 443:443
+      - ${NGINX_HTTP_PORT}:80
+      - ${NGINX_HTTPS_PORT}:443
     links:
       - mysql
       - redis
       - php
     volumes:
-      - ./app:/data/www
-      - ./nginx/vhost:/etc/nginx/conf.d
-      - ./nginx/logs:/data/logs
+      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+      - ${NGINX_VHOST_PATH}:/etc/nginx/conf.d
+      - ${NGINX_LOGS_PATH}:/data/logs
+    extra_hosts:
+      - "dockerhost:${DOCKER_HOST_IP}"
     networks:
       - backend
     command: nginx -g "daemon off;"
@@ -22,11 +24,15 @@ services:
 
   php:
     container_name: "Jun_PHP"
-    image: 'php:7.2-fpm-alpine'
-    ports:
-      - 9000:9000
+    # build:
+    #   context: ./php
+    image: "php:${PHP_VERSION}"
     volumes:
-      - ./app:/var/www/html
+      - ${APP_CODE_PATH_HOST}:${PHP_CODE_PATH_CONTAINER}
+    expose:
+      - "9000"
+    extra_hosts:
+      - "dockerhost:${DOCKER_HOST_IP}"
     networks:
       - backend
 
@@ -34,25 +40,40 @@ services:
     container_name: "Jun_Redis"
     image: 'redis'
     ports:
-      - 6379:6379
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - ${DATA_PATH_HOST}/redis:/data
+    extra_hosts:
+      - "dockerhost:${DOCKER_HOST_IP}"
     networks:
       - backend
 
   mysql:
     container_name: "Jun_MySQL"
-    image: 'mysql:5.7'
+    image: 'mysql:${MYSQL_VERSION}'
     ports:
-      - 3306:3306
+      - "${MYSQL_PORT}:3306"
+    extra_hosts:
+      - "dockerhost:${DOCKER_HOST_IP}"
     networks:
       - backend
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
-      - ./mysql/data:/var/lib/mysql
+      - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
 
 networks:
   backend:
-    driver: bridge
+    driver: ${NETWORKS_DRIVER}
 volumes:
+  web:
+    driver: ${VOLUMES_DRIVER}
+  php:
+    driver: ${VOLUMES_DRIVER}
+  redis:
+    driver: ${VOLUMES_DRIVER}
   mysql:
-    driver: local
+    driver: ${VOLUMES_DRIVER}
