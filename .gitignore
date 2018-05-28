@@ -5,6 +5,7 @@ Thumbs.db
 /phpunit.xml
 /.idea
 /.vscode
+/.env
 /nginx/logs/nginx/access.log
 /nginx/logs/nginx/error.log
 /app/*
