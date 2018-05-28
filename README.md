@@ -1,9 +1,19 @@
 # 拍簧片Docker镜像环境
     PHP-7.2.6 MySQL-5.7 Nginx-1.13.0 Redis-latest
 
+### 运行步骤
+###### 1、克隆项目
+    git clone https://github.com/jun3372/php-docker.git
+
+###### 2、拷贝配置文件
+    cp env-example .env
+
+###### 3、启动项目
+    docker-composer.exe up -d
+
 ### 启动所有环境
     docker-composer.exe up -d
-    
+
 ### 启动指定镜像
     docker-composer.exe up -d {package name}
 
@@ -11,6 +21,7 @@
     project                     docker克隆目录
     ├─app                       网站项目目录
     |   |-default               默认网站目录
+    │   └─ ...                  更多虚拟机目录
     |-data                      数据存储目录
     |   |-mysql                 mysql数据目录
     |   |-redis                 redis数据目录
