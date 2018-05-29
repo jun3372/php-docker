@@ -1,6 +1,8 @@
 version: '2'
 
 services:
+
+### Web ################################################
   web:
     container_name: "Jun_Nginx"
     image: 'nginx:${NGINX_VERSION}'
@@ -11,6 +13,8 @@ services:
       - mysql
       - redis
       - php
+    depends_on:
+      - "${PMA_DB_ENGINE}"
     volumes:
       - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       - ${NGINX_VHOST_PATH}:/etc/nginx/conf.d
@@ -21,21 +25,30 @@ services:
       - backend
     command: nginx -g "daemon off;"
     tty: true
+    restart: always
 
+### Php ################################################
   php:
     container_name: "Jun_PHP"
-    # build:
-    #   context: ./php
-    image: "php:${PHP_VERSION}"
+    build:
+      context: ./php
+    # image: "php:${PHP_VERSION}"
     volumes:
       - ${APP_CODE_PATH_HOST}:${PHP_CODE_PATH_CONTAINER}
     expose:
       - "9000"
+    links:
+      - mysql
+      - redis
+    depends_on:
+      - "${PMA_DB_ENGINE}"
     extra_hosts:
       - "dockerhost:${DOCKER_HOST_IP}"
     networks:
       - backend
+    restart: always
 
+### Redis ################################################
   redis:
     container_name: "Jun_Redis"
     image: 'redis'
@@ -47,7 +60,9 @@ services:
       - "dockerhost:${DOCKER_HOST_IP}"
     networks:
       - backend
+    restart: always
 
+### MySQL ################################################
   mysql:
     container_name: "Jun_MySQL"
     image: 'mysql:${MYSQL_VERSION}'
@@ -64,6 +79,25 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+    restart: always
+
+
+### phpMyAdmin ###########################################
+  phpmyadmin:
+    container_name: "Jun_PHPMyMySQL"
+    build: ./phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - MYSQL_USER=${PMA_USER}
+      - MYSQL_PASSWORD=${PMA_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${PMA_ROOT_PASSWORD}
+    ports:
+      - "${PMA_PORT}:80"
+    depends_on:
+      - "${PMA_DB_ENGINE}"
+    networks:
+      - backend
+    restart: always
 
 networks:
   backend:
@@ -76,4 +110,6 @@ volumes:
   redis:
     driver: ${VOLUMES_DRIVER}
   mysql:
+    driver: ${VOLUMES_DRIVER}
+  phpmyadmin:
     driver: ${VOLUMES_DRIVER}

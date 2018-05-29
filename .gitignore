@@ -11,3 +11,4 @@ Thumbs.db
 /app/*
 data/mysql/*
 data/edis/*
+data/redis/dump.rdb
