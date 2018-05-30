@@ -37,7 +37,7 @@ PHP_VERSION=7.2-fpm-alpine
 
 ### NGINX #################################################
 
-NGINX_VERSION=1.13.0
+NGINX_VERSION=1.13.0-alpine
 NGINX_VHOST_PATH=./nginx/vhost
 NGINX_LOGS_PATH=./nginx/logs
 NGINX_HTTP_PORT=80

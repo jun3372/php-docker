@@ -85,7 +85,8 @@ services:
 ### phpMyAdmin ###########################################
   phpmyadmin:
     container_name: "Jun_PHPMyMySQL"
-    build: ./phpmyadmin
+    # build: ./phpmyadmin
+    image: "phpmyadmin/phpmyadmin"
     environment:
       - PMA_ARBITRARY=1
       - MYSQL_USER=${PMA_USER}
