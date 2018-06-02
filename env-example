@@ -72,3 +72,9 @@ PMA_USER=default
 PMA_PASSWORD=secret
 PMA_ROOT_PASSWORD=secret
 PMA_PORT=8080
+
+
+### MEMCACHED #############################################
+
+MEMCACHED_HOST_PORT=11211
+MEMCACHED_VERSION=latest

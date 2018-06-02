@@ -19,10 +19,12 @@ RUN apk --update add wget \
   supervisor
 
 RUN docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml
-RUN pecl channel-update pecl.php.net && pecl install memcached mcrypt-1.0.1 && docker-php-ext-enable memcached
+RUN pecl channel-update pecl.php.net
 
+RUN pecl install memcached mcrypt-1.0.1
+RUN pecl install swoole
 RUN pecl install redis
-RUN docker-php-ext-enable redis
+RUN docker-php-ext-enable redis swoole memcached
 
 RUN rm /var/cache/apk/*
 

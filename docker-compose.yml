@@ -12,6 +12,7 @@ services:
     links:
       - mysql
       - redis
+      - memcached
       - php
     depends_on:
       - "${PMA_DB_ENGINE}"
@@ -100,6 +101,21 @@ services:
       - backend
     restart: always
 
+### Memcached ############################################
+  memcached:
+    container_name: "Jun_Memcached"
+    image: memcached:${MEMCACHED_VERSION}
+    volumes:
+      - ${DATA_PATH_HOST}/memcached:/var/lib/memcached
+    ports:
+      - "${MEMCACHED_HOST_PORT}:11211"
+    command: memcached
+    depends_on:
+      - "${PMA_DB_ENGINE}"
+    networks:
+      - backend
+    restart: always
+
 networks:
   backend:
     driver: ${NETWORKS_DRIVER}
@@ -113,4 +129,6 @@ volumes:
   mysql:
     driver: ${VOLUMES_DRIVER}
   phpmyadmin:
+    driver: ${VOLUMES_DRIVER}
+  memcached:
     driver: ${VOLUMES_DRIVER}
