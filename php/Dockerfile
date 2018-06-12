@@ -18,10 +18,14 @@ RUN apk --update add wget \
   libgsasl-dev \
   supervisor
 
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer \
+    && composer self-update --clean-backups
+
 RUN docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml
 RUN pecl channel-update pecl.php.net
 
-RUN pecl install memcached mcrypt-1.0.1
+RUN pecl install memcached
 RUN pecl install swoole
 RUN pecl install redis
 RUN docker-php-ext-enable redis swoole memcached
