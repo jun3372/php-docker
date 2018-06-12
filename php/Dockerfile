@@ -18,9 +18,15 @@ RUN apk --update add wget \
   libgsasl-dev \
   supervisor
 
+
+RUN apk add --no-cache tzdata \  
+    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && composer self-update --clean-backups
+
 
 RUN docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml
 RUN pecl channel-update pecl.php.net
@@ -29,6 +35,8 @@ RUN pecl install memcached
 RUN pecl install swoole
 RUN pecl install redis
 RUN docker-php-ext-enable redis swoole memcached
+
+RUN apk del tzdata
 
 RUN rm /var/cache/apk/*
 
