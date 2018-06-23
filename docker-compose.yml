@@ -33,11 +33,13 @@ services:
     container_name: "Jun_PHP"
     build:
       context: ./php
+      args:
+        - PHP_VERSION=${PHP_VERSION}
     # image: "php:${PHP_VERSION}"
     volumes:
       - ${APP_CODE_PATH_HOST}:${PHP_CODE_PATH_CONTAINER}
-    expose:
-      - "9000"
+    ports:
+      - "${PHP_PORT}:9000"
     links:
       - mysql
       - redis
@@ -52,7 +54,7 @@ services:
 ### Redis ################################################
   redis:
     container_name: "Jun_Redis"
-    image: 'redis'
+    image: 'redis:${REDIS_VERSION}'
     ports:
       - "${REDIS_PORT}:6379"
     volumes:

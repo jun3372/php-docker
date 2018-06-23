@@ -1,22 +1,24 @@
-ARG PHP_VERSION=7.2-fpm-alpine
+ARG PHP_VERSION=${PHP_VERSION}
+
 FROM php:${PHP_VERSION}
 
 LABEL maintainer="Jun <zhoujun3372@gmail.com>"
 
-
-# Install dependencies
 RUN apk --update add wget \
-  curl \
-  git \
-  build-base \
-  libmemcached-dev \
-  libmcrypt-dev \
-  libxml2-dev \
-  zlib-dev \
-  autoconf \
-  cyrus-sasl-dev \
-  libgsasl-dev \
-  supervisor
+    vim \
+    curl \
+    git \
+    build-base \
+    libmemcached-dev \
+    libmcrypt-dev \
+    libxml2-dev \
+    zlib-dev \
+    autoconf \
+    cyrus-sasl-dev \
+    libgsasl-dev \
+    supervisor \
+    libpng \
+    libpng-dev
 
 
 RUN apk add --no-cache tzdata \  
@@ -27,8 +29,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && composer self-update --clean-backups
 
-
-RUN docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml
+RUN docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml zip gd
 RUN pecl channel-update pecl.php.net
 
 RUN pecl install memcached
@@ -36,7 +37,7 @@ RUN pecl install swoole
 RUN pecl install redis
 RUN docker-php-ext-enable redis swoole memcached
 
-RUN apk del tzdata
+RUN apk del tzdata libpng-dev
 
 RUN rm /var/cache/apk/*
 
