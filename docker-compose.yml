@@ -38,6 +38,8 @@ services:
     # image: "php:${PHP_VERSION}"
     volumes:
       - ${APP_CODE_PATH_HOST}:${PHP_CODE_PATH_CONTAINER}
+    expose:
+      - "${PHP_PORT}"
     ports:
       - "${PHP_PORT}:9000"
     links:
