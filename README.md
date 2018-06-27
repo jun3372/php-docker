@@ -1,4 +1,4 @@
-# 拍簧片Docker镜像环境
+# PHP Docker镜像环境
     PHP-7.2.6 MySQL-5.7 Nginx-1.13.0 Redis-latest
 
 ### 运行步骤
