@@ -32,8 +32,9 @@ NETWORKS_DRIVER=bridge
 ### PHP Version ###########################################
 
 # Select a PHP version of the Workspace and PHP-FPM containers (Does not apply to HHVM). Accepted values: 7.2 - 7.1 - 7.0 - 5.6 - 5.5
-PHP_VERSION=7.2.6-fpm-alpine
+PHP_VERSION=7.2.7-fpm-alpine3.7
 PHP_PORT=9000
+PHP_XDEBUG_PORT=9001
 
 
 ### NGINX #################################################
