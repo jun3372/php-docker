@@ -31,14 +31,15 @@ services:
 ### Php ################################################
   php:
     container_name: "Jun_PHP"
-    build:
-      context: ./php
-      args:
-        - PHP_VERSION=${PHP_VERSION}
-        - PHP_PORT=${PHP_PORT}
-        - DOCKER_HOST_IP=${DOCKER_HOST_IP}
-        - PHP_XDEBUG_PORT=${PHP_XDEBUG_PORT}
-    # image: "php:${PHP_VERSION}"
+    # build:
+    #   context: ./php
+    #   args:
+    #     - PHP_VERSION=${PHP_VERSION}
+    #     - PHP_PORT=${PHP_PORT}
+    #     - DOCKER_HOST_IP=${DOCKER_HOST_IP}
+    #     - PHP_XDEBUG_PORT=${PHP_XDEBUG_PORT}
+    image: "jun3/php:${PHP_VERSION}"
+    # image: "bitnami/php-fpm:latest"
     volumes:
       - ${APP_CODE_PATH_HOST}:${PHP_CODE_PATH_CONTAINER}
     expose:
