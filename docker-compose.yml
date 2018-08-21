@@ -34,12 +34,8 @@ services:
     # build:
     #   context: ./php
     #   args:
-    #     - PHP_VERSION=${PHP_VERSION}
-    #     - PHP_PORT=${PHP_PORT}
-    #     - DOCKER_HOST_IP=${DOCKER_HOST_IP}
-    #     - PHP_XDEBUG_PORT=${PHP_XDEBUG_PORT}
+    #     - PHP_VERSION=${PHP_COMPILE_VERSION}
     image: "jun3/php:${PHP_VERSION}"
-    # image: "bitnami/php-fpm:latest"
     volumes:
       - ${APP_CODE_PATH_HOST}:${PHP_CODE_PATH_CONTAINER}
     expose:

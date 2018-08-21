@@ -1,4 +1,6 @@
-FROM php:7.1.6-fpm-alpine
+ARG PHP_VERSION=${PHP_COMPILE_VERSION}
+
+FROM php:${PHP_VERSION}
 
 LABEL maintainer="Jun <zhoujun3372@gmail.com>"
 
