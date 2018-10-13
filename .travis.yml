@@ -1,0 +1,12 @@
+sudo: required
+
+language: bash
+services: docker
+
+script:
+  - cp env-example .env
+  - docker-composer up -d
+
+after_script:
+  - docker images
+  - docker ps -a
