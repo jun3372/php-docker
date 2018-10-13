@@ -1,0 +1,15 @@
+sudo: required
+
+language: bash
+services: docker
+
+env:
+ - DOCKER_IMAGE=jun3/php-test
+
+script:
+  - docker build -t ${DOCKER_IMAGE} .
+
+after_script:
+  - docker images
+  - docker run -d -p 9000:9000 -d ${DOCKER_IMAGE}
+  - docker ps -a
