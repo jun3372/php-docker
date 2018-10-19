@@ -5,8 +5,7 @@ Thumbs.db
 /.idea
 /.vscode
 /.env
-nginx/logs/*
-nginx/logs/*
+/nginx/logs/*
 /nginx/vhost/*
 /nginx/ssl/*
 /app/*
