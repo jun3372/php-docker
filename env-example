@@ -51,7 +51,7 @@ NGINX_HTTPS_PORT=443
 
 ### MYSQL #################################################
 
-MYSQL_VERSION=5.7.6
+MYSQL_VERSION=5.7
 MYSQL_DATABASE=default
 MYSQL_USER=default
 MYSQL_PASSWORD=secret
