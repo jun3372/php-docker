@@ -9,7 +9,7 @@ services:
     ports:
       - ${NGINX_HTTP_PORT}:80
       - ${NGINX_HTTPS_PORT}:443
-    links:
+    depends_on:
       - mysql
       - redis
       # - memcached
@@ -23,6 +23,7 @@ services:
       - "dockerhost:${DOCKER_HOST_IP}"
     networks:
       - backend
+          # ipv4_address: 192.168.10.1
     tty: true
     privileged: true
     restart: always
@@ -42,9 +43,9 @@ services:
     ports:
       - "${PHP_PORT}:9000"
       - "${PHP_XDEBUG_PORT}:9001"
-    links:
-      - mysql
-      - redis
+    # links:
+    #   - mysql
+    #   - redis
       # - memcached
     depends_on:
       - "${PMA_DB_ENGINE}"
@@ -81,6 +82,7 @@ services:
       - "dockerhost:${DOCKER_HOST_IP}"
     networks:
       - backend
+          # ipv4_address: 192.168.10.3
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
@@ -95,8 +97,7 @@ services:
 
 ### phpMyAdmin ###########################################
   phpmyadmin:
-    container_name: "Jun_PHPMyMySQL"
-    # build: ./phpmyadmin
+    container_name: "Jun_PHPMyAdmin"
     image: "phpmyadmin/phpmyadmin"
     environment:
       - PMA_ARBITRARY=1
@@ -104,6 +105,8 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - TZ=${MYSQL_TIMEZONE}
+    volumes:
+      - ${PMA_DATA_PATH}:/var/www/html
     ports:
       - "${PMA_PORT}:80"
     extra_hosts:
@@ -114,22 +117,6 @@ services:
       - backend
     privileged: true
     restart: always
-
-### Memcached ############################################
-  # memcached:
-  #   container_name: "Jun_Memcached"
-  #   image: memcached:${MEMCACHED_VERSION}
-  #   volumes:
-  #     - ${DATA_PATH_HOST}/memcached:/var/lib/memcached
-  #   ports:
-  #     - "${MEMCACHED_HOST_PORT}:11211"
-  #   extra_hosts:
-  #     - "dockerhost:${DOCKER_HOST_IP}"
-  #   command: memcached
-  #   networks:
-  #     - backend
-  #   privileged: true
-  #   restart: always
 
 networks:
   backend:
@@ -145,5 +132,3 @@ volumes:
     driver: ${VOLUMES_DRIVER}
   phpmyadmin:
     driver: ${VOLUMES_DRIVER}
-  # memcached:
-  #   driver: ${VOLUMES_DRIVER}

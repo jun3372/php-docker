@@ -2,6 +2,7 @@ composer.lock
 .DS_Store
 Thumbs.db
 /phpunit.xml
+
 /.idea
 /.vscode
 /.env
@@ -9,6 +10,4 @@ Thumbs.db
 /nginx/vhost/*
 /nginx/ssl/*
 /app/*
-/data/mysql/*
-/data/redis/*
-/data/memcached/*
+/data/*

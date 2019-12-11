@@ -1,65 +1,57 @@
 # ARG PHP_VERSION=${PHP_COMPILE_VERSION}
 
-FROM php:7.1-fpm-alpine
+FROM php:fpm-alpine
 
 LABEL maintainer="Jun <zhoujun3372@gmail.com>"
 
 # 设置中国源
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+# RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories 
+    
 
 # 设置http为https
-RUN sed -i 's/http/https/g' /etc/apk/repositories
+# RUN sed -i 's/http/https/g' /etc/apk/repositories
 
-RUN apk add --no-cache --virtual .build-deps \
-    autoconf \
-    file \
-    gcc \
-    g++ \
-    libc-dev \
-    make \
-    pkgconf \
-    re2c
+# RUN apk add --no-cache --virtual .build-deps \
+#     autoconf \
+#     file \
+#     gcc \
+#     g++ \
+#     libc-dev \
+#     make \
+#     pkgconf \
+#     re2c
 
-RUN apk add --no-cache --virtual tzdata \
-    zlib-dev \
-    coreutils \
-    supervisor \
-    libltdl \
-    freetype-dev \
-    gettext-dev \
-    libjpeg-turbo-dev \
-    libpng-dev \
-    curl-dev \
-    libmcrypt-dev \
-    libxml2-dev \
-    cyrus-sasl-dev \
-    libmemcached-dev \
-    hiredis
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+    && apk add --no-cache --virtual .build-deps tzdata \
+    gcc make file g++ openssl-dev  nghttp2-dev hiredis-dev \
+    php7 php7-fpm php7-xml php7-json php7-pear php7-openssl \
+    php7-dev php7-sockets php7-curl php7-iconv php7-zip php7-gd php7-igbinary \
+    && pear config-set php_ini /etc/php7/php.ini \
+    && pecl channel-update pecl.php.net \
+    && yes | pecl install swoole \
+    && yes | pecl install redis
 
-RUN docker-php-ext-install -j$(nproc) \
-    iconv mcrypt gettext curl mysqli pdo pdo_mysql zip \
-    mbstring bcmath opcache xml simplexml sockets hash soap exif
 
 # Gd
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && docker-php-ext-install -j$(nproc) gd
+# RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && docker-php-ext-install -j$(nproc) gd
 
+# RUN yes | pecl install swoole redis && docker-php-ext-enable swoole redis
 # Redis
-RUN pecl install redis && docker-php-ext-enable redis
+# RUN pecl install redis && docker-php-ext-enable redis
 
 # Memcached
-RUN pecl install memcached && docker-php-ext-enable memcached
+# RUN pecl install memcached && docker-php-ext-enable memcached
 
 # Swoole
-RUN pecl install swoole && docker-php-ext-enable swoole
-# RUN && pecl install xdebug-2.5.0 
+# RUN pecl install swoole && docker-php-ext-enable swoole
 
 # 中国时区
-RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime  && echo "Asia/Shanghai" >  /etc/timezone
+# RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime  && echo "Asia/Shanghai" >  /etc/timezone
 
 # Composer
 RUN curl -sS https://install.phpcomposer.com/installer | php \
     && mv composer.phar /usr/local/bin/composer \
-    # && composer config -g repo.packagist composer https://packagist.laravel-china.org \
+    && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
     && composer self-update --clean-backups
 
 # 清理
