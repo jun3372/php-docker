@@ -26,7 +26,8 @@ DOCKER_HOST_IP=10.0.75.1
 VOLUMES_DRIVER=local
 
 # All Networks driver
-NETWORKS_DRIVER=bridge
+# NETWORKS_DRIVER=bridge
+NETWORKS_DRIVER=host
 
 
 ### PHP Version ###########################################
